@@ -1,0 +1,19 @@
+services:
+  db:
+    image: postgres:18-alpine
+    container_name: ru-fin-db
+    restart: unless-stopped
+    env_file:
+      - ./.env.db
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$(POSTGRES_USER) -d $$(POSTGRES_DB)"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pg_data:
